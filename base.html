@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}Student Record System{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script src="{{ url_for('static', filename='app.js') }}" defer></script></head><body>
+{% if session.role %}
+<header><h1>Student Record Management System &nbsp;|&nbsp; {{ session.role|capitalize }}: {{ session.username }}</h1>
+ {% if session.role == 'staff' %}<a href="{{ url_for('staff') }}">Dashboard</a><a href="{{ url_for('staff_benchmark') }}">Benchmark</a>{% endif %}
+ <a href="{{ url_for('change_password') }}">Change password</a>
+ <form method="post" action="{{ url_for('logout') }}"><input type="hidden" name="csrf" value="{{ csrf() }}"><button>Logout</button></form></header>
+{% endif %}
+<main>
+ {% for cat, msg in get_flashed_messages(with_categories=true) %}<div class="flash {{ cat }}">{{ msg }}</div>{% endfor %}
+ {% block body %}{% endblock %}
+</main></body></html>

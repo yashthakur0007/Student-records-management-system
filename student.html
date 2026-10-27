@@ -1,0 +1,12 @@
+{% extends 'base.html' %}{% block title %}My record{% endblock %}
+{% block body %}
+<div class="card" style="max-width:520px;margin:30px auto"><h2 style="margin-top:0">Welcome, {{ s.name }}</h2>
+ <table>
+  <tr><th>Roll number</th><td>{{ s.roll }}</td></tr>
+  <tr><th>Name</th><td>{{ s.name }}</td></tr>
+  <tr><th>Course</th><td>{{ s.course }}</td></tr>
+  <tr><th>Marks</th><td>{% if s.marks_verified %}{{ s.marks }} / 100{% else %}<span class="no">Pending verification by staff</span>{% endif %}</td></tr>
+  <tr><th>CGPA</th><td>{% if s.marks_verified %}{{ '%.2f'|format(s.cgpa) }}{% else %}<span class="no">Pending verification by staff</span>{% endif %}</td></tr>
+  <tr><th>Attendance</th><td>{% if s.attendance_verified %}{{ '%.1f'|format(s.attendance) }} %{% else %}<span class="no">Pending verification by staff</span>{% endif %}</td></tr>
+ </table></div>
+{% endblock %}

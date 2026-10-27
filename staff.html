@@ -1,0 +1,43 @@
+{% extends 'base.html' %}{% block title %}Staff dashboard{% endblock %}
+{% block body %}
+<div class="card">
+ <div class="bar">
+  <form class="inline bar" method="get"><input type="hidden" name="view" value="search">
+   <input name="q" placeholder="Search roll number" required><button class="btn">Search (binary)</button></form>
+  <a class="btn gray" href="{{ url_for('staff') }}">All</a>
+  <a class="btn gray" href="{{ url_for('staff', view='marks', order='desc') }}">Marks &darr;</a>
+  <a class="btn gray" href="{{ url_for('staff', view='marks', order='asc') }}">Marks &uarr;</a>
+  <a class="btn gray" href="{{ url_for('staff', view='cgpa', order='desc') }}">CGPA &darr;</a>
+  <a class="btn gray" href="{{ url_for('staff', view='cgpa', order='asc') }}">CGPA &uarr;</a>
+  <a class="btn green" href="{{ url_for('staff', view='top10') }}">Top 10</a>
+  <a class="btn green" href="{{ url_for('staff', view='same') }}">Same marks</a>
+  <form class="inline" method="post" action="{{ url_for('staff_sample') }}"><input type="hidden" name="csrf" value="{{ csrf() }}">
+   <button class="btn gray">Load 50 sample students</button></form>
+ </div>
+ <details><summary class="btn">+ Add student</summary>
+  <form method="post" action="{{ url_for('staff_add') }}"><input type="hidden" name="csrf" value="{{ csrf() }}">
+   <div class="grid">
+    <div><label>Roll number</label><input name="roll" required></div>
+    <div><label>Name</label><input name="name" required></div>
+    <div><label>Course</label><input name="course" required></div>
+    <div><label>Marks (0-100)</label><input name="marks" type="number" min="0" max="100" required></div>
+    <div><label>CGPA (0-10)</label><input name="cgpa" type="number" step="0.01" min="0" max="10" required></div>
+    <div><label>Attendance %</label><input name="attendance" type="number" step="0.1" min="0" max="100" required></div>
+    <div><label>Login password (blank = roll no.)</label><input name="password" type="password"></div>
+   </div><p><button class="btn green">Save student</button></p></form></details>
+</div>
+<div class="card"><h3 style="margin-top:0">{{ title }} <small style="color:#64748b">({{ rows|length }} shown of {{ total }})</small></h3>
+ <div style="overflow-x:auto"><table>
+  <tr><th>Roll</th><th>Name</th><th>Course</th><th>Marks</th><th>CGPA</th><th>Attend %</th><th>Marks verified</th><th>Att. verified</th><th>Actions</th></tr>
+  {% for s in rows %}<tr>
+   <td>{{ s.roll }}</td><td>{{ s.name }}</td><td>{{ s.course }}</td><td>{{ s.marks }}</td><td>{{ '%.2f'|format(s.cgpa) }}</td><td>{{ s.attendance }}</td>
+   <td>{% if s.marks_verified %}<span class="yes">Yes</span>{% else %}<span class="no">No</span>
+     <form class="inline" method="post" action="{{ url_for('staff_verify', roll=s.roll, what='marks') }}"><input type="hidden" name="csrf" value="{{ csrf() }}"><button class="btn sm green">Verify</button></form>{% endif %}</td>
+   <td>{% if s.attendance_verified %}<span class="yes">Yes</span>{% else %}<span class="no">No</span>
+     <form class="inline" method="post" action="{{ url_for('staff_verify', roll=s.roll, what='attendance') }}"><input type="hidden" name="csrf" value="{{ csrf() }}"><button class="btn sm green">Verify</button></form>{% endif %}</td>
+   <td><a class="btn sm" href="{{ url_for('staff_edit', roll=s.roll) }}">Edit</a>
+     <form class="inline" method="post" action="{{ url_for('staff_delete', roll=s.roll) }}" data-confirm="Delete {{ s.roll }} and their login?">
+      <input type="hidden" name="csrf" value="{{ csrf() }}"><button class="btn sm red">Delete</button></form></td>
+  </tr>{% else %}<tr><td colspan="9">No records.</td></tr>{% endfor %}
+ </table></div></div>
+{% endblock %}

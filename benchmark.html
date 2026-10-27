@@ -1,0 +1,9 @@
+{% extends 'base.html' %}{% block title %}Benchmark{% endblock %}
+{% block body %}
+<div class="card"><h2 style="margin-top:0">Linear search vs Binary search</h2>
+ <p>100 random searches on a sorted dataset of each size. The big run can take a few seconds.</p>
+ <form method="post"><input type="hidden" name="csrf" value="{{ csrf() }}"><button class="btn">Run benchmark</button></form>
+ {% if rows %}<br><table><tr><th>Dataset size</th><th>Linear O(n) ms</th><th>Binary O(log n) ms</th><th>Speed-up</th></tr>
+ {% for n, lin, b, sp in rows %}<tr><td>{{ '{:,}'.format(n) }}</td><td>{{ '%.3f'|format(lin) }}</td><td>{{ '%.3f'|format(b) }}</td><td>{{ '%.0f'|format(sp) }}x</td></tr>{% endfor %}</table>
+ <p>The gap grows with the data size because binary search halves the range at every step.</p>{% endif %}</div>
+{% endblock %}

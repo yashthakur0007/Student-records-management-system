@@ -1,0 +1,14 @@
+{% extends 'base.html' %}{% block title %}Edit student{% endblock %}
+{% block body %}
+<div class="card" style="max-width:560px;margin:auto"><h2 style="margin-top:0">Edit {{ s.roll }}</h2>
+ <form method="post"><input type="hidden" name="csrf" value="{{ csrf() }}">
+  <label>Name</label><input name="name" value="{{ s.name }}" style="width:100%" required>
+  <label>Course</label><input name="course" value="{{ s.course }}" style="width:100%" required>
+  <label>Marks (0-100)</label><input name="marks" type="number" min="0" max="100" value="{{ s.marks }}" style="width:100%" required>
+  <label>CGPA (0-10)</label><input name="cgpa" type="number" step="0.01" min="0" max="10" value="{{ s.cgpa }}" style="width:100%" required>
+  <label>Attendance %</label><input name="attendance" type="number" step="0.1" min="0" max="100" value="{{ s.attendance }}" style="width:100%" required>
+  <p><button class="btn green">Update</button> <a class="btn gray" href="{{ url_for('staff') }}">Back</a></p></form></div>
+<div class="card" style="max-width:560px;margin:16px auto"><h3 style="margin-top:0">Reset student password</h3>
+ <form method="post" action="{{ url_for('staff_reset', roll=s.roll) }}"><input type="hidden" name="csrf" value="{{ csrf() }}">
+  <input name="password" type="password" placeholder="New password (min 6)" required> <button class="btn red">Reset</button></form></div>
+{% endblock %}

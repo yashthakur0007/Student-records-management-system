@@ -1,0 +1,12 @@
+{% extends 'base.html' %}{% block title %}Login{% endblock %}
+{% block body %}
+<div class="card" style="max-width:380px;margin:70px auto">
+ <h2 style="margin-top:0">Student Record System</h2>
+ <form method="post"><input type="hidden" name="csrf" value="{{ csrf() }}">
+  <label>Login as</label>
+  <select name="role" style="width:100%"><option value="student">Student</option><option value="staff">Staff</option></select>
+  <label>Username (students: roll number)</label><input name="username" style="width:100%" autofocus required>
+  <label>Password</label><input type="password" name="password" style="width:100%" required>
+  <p><button class="btn" style="width:100%">Login</button></p>
+ </form></div>
+{% endblock %}
